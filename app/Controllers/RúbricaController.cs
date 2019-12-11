@@ -6,11 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using App.Models;
-using Microsoft.AspNetCore.Authorization;
 
-namespace App.Controllers
+namespace app.Controllers
 {
-    [AllowAnonymous]
     public class RúbricaController : Controller
     {
         private readonly ContextoApp _context;
@@ -55,10 +53,12 @@ namespace App.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id")] Rúbrica rúbrica)
+        public async Task<IActionResult> Create([Bind("Nombre,Id")] Rúbrica rúbrica)
         {
             if (ModelState.IsValid)
             {
+                rúbrica.FechaDeRegistro = DateTime.Now;
+                rúbrica.Estado = Rúbrica.RúbricaState.ACTIVA;
                 _context.Add(rúbrica);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -87,7 +87,7 @@ namespace App.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id")] Rúbrica rúbrica)
+        public async Task<IActionResult> Edit(long id, [Bind("FechaDeRegistro,Nombre,Estado,Id")] Rúbrica rúbrica)
         {
             if (id != rúbrica.Id)
             {

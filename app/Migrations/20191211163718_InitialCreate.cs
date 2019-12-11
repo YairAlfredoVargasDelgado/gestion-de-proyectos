@@ -66,6 +66,9 @@ namespace app.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    FechaDeRegistro = table.Column<DateTime>(nullable: false),
+                    Nombre = table.Column<string>(nullable: true),
+                    Estado = table.Column<int>(nullable: false),
                     AdministradorId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>

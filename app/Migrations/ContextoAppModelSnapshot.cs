@@ -199,6 +199,15 @@ namespace app.Migrations
                     b.Property<long?>("AdministradorId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Estado")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("FechaDeRegistro")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AdministradorId");

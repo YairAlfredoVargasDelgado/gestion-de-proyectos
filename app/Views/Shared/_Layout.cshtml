@@ -19,13 +19,14 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-                        @if (App.Models.SesiónActual.Sesión != null) {
+                        @if (App.Models.SesiónActual.Sesión == null) {
                         
-                        @if (App.Models.SesiónActual.Sesión.Usuario.Rol == App.Models.Rol.ADMINISTRADOR) {
+                        
+                        // @if (App.Models.SesiónActual.Sesión.Usuario.Rol == App.Models.Rol.ADMINISTRADOR) {
                         <li class="nav-item">
                             <a class="nav-link text-white" style ="margin-left:50px" asp-area="" asp-controller="Asignaturas" asp-action="Index">Asignaturas</a>
                         </li>
-                        }
+                        //}
 
                         <li class="nav-item">
                             <a class="nav-link text-white" style ="margin-left:50px" asp-area="" asp-controller="Proyecto" asp-action="Index">Proyecto</a>
@@ -44,7 +45,7 @@
                         </li>
                         } else {
                         <li class="nav-item">
-                            <a class="nav-link text-white" style ="margin-left:50px" asp-area="" asp-controller="Sesiones" asp-action="Create">Rúbrica</a>
+                            <a class="nav-link text-white" style ="margin-left:50px" asp-area="" asp-controller="Sesiones" asp-action="Create">Iniciar sesión</a>
                         </li>
                         }
                     </ul>

@@ -4,10 +4,8 @@
     ViewData["Title"] = "Index";
 }
 
-@if (App.Models.SesiónActual.Sesión == null)
-<p>
-    <a asp-action="Create">Agregar Nueva Asignatura</a>
-</p>
+<a asp-action="Create">Agregar Nueva Asignatura</a>
+
 <table class="table">
     <thead>
         <tr>
