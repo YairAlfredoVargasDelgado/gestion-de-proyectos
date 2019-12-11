@@ -1,0 +1,20 @@
+@model App.Models.Rúbrica
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Eliminar</h1>
+
+<div>
+    <h4>Rúbrica</h4>
+    <hr />
+    <dl class="row">
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+        <a class="btn btn-primary" asp-action="Index">Volver a la lista</a>
+    </form>
+</div>

@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - repositorio</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-dark navbar-light border-bottom box-shadow mb-3">
+            <div class="container">
+                <a asp-controller="Home" asp-action="Index"><img src="~/images/logo.png" class="img-fluid" alt="Responsive image" style="height:50px"></a>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (App.Models.SesiónActual.Sesión != null) {
+                        
+                        @if (App.Models.SesiónActual.Sesión.Usuario.Rol == App.Models.Rol.ADMINISTRADOR) {
+                        <li class="nav-item">
+                            <a class="nav-link text-white" style ="margin-left:50px" asp-area="" asp-controller="Asignaturas" asp-action="Index">Asignaturas</a>
+                        </li>
+                        }
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" style ="margin-left:50px" asp-area="" asp-controller="Proyecto" asp-action="Index">Proyecto</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" style ="margin-left:50px" asp-area="" asp-controller="Calificador" asp-action="Index">Calificador</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" style ="margin-left:50px" asp-area="" asp-controller="Director" asp-action="Index">Director</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" style ="margin-left:50px" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuario</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" style ="margin-left:50px" asp-area="" asp-controller="Rúbrica" asp-action="Index">Rúbrica</a>
+                        </li>
+                        } else {
+                        <li class="nav-item">
+                            <a class="nav-link text-white" style ="margin-left:50px" asp-area="" asp-controller="Sesiones" asp-action="Create">Rúbrica</a>
+                        </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2019 - repositorio - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,16 @@
+@model App.Models.Sesión
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Cerrar sesión</h1>
+
+<h3>¿Está seguro de que quiere cerrar sesión?</h3>
+<div>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" asp-action="Delete" value="Cerrar sesión" class="btn btn-danger" style="margin-right:10px" />
+        <a asp-controller="Home" asp-action="Index" class="btn btn-dark">Cancelar</a>
+    </form>
+</div>
