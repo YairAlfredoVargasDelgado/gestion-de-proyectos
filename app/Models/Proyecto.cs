@@ -53,6 +53,8 @@ namespace App.Models
 
         public Rúbrica Rúbrica { get; set; }
 
+        public float Calificación { get; set; }
+
         public Proyecto()
         {
         }

@@ -6,27 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using App.Models;
-using Microsoft.AspNetCore.Authorization;
 
-namespace App.Controllers
+namespace app.Controllers
 {
-    [AllowAnonymous]
-    public class AdministradorController : Controller
+    public class AdminstradorController : Controller
     {
         private readonly ContextoApp _context;
 
-        public AdministradorController(ContextoApp context)
+        public AdminstradorController(ContextoApp context)
         {
             _context = context;
         }
 
-        // GET: Administrador
+        // GET: Adminstrador
         public async Task<IActionResult> Index()
         {
             return View(await _context.Administrador.ToListAsync());
         }
 
-        // GET: Administrador/Details/5
+        // GET: Adminstrador/Details/5
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -44,21 +42,22 @@ namespace App.Controllers
             return View(administrador);
         }
 
-        // GET: Administrador/Create
+        // GET: Adminstrador/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Administrador/Create
+        // POST: Adminstrador/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id")] Administrador administrador)
+        public async Task<IActionResult> Create([Bind("Nombre,Contraseña,CorreoElectrónico,Identificación,Sexo,Edad,Nombres,PrimerApellido,SegundoApellido,Id")] Administrador administrador)
         {
             if (ModelState.IsValid)
             {
+                administrador.Rol = Rol.ADMINISTRADOR;
                 _context.Add(administrador);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -66,7 +65,7 @@ namespace App.Controllers
             return View(administrador);
         }
 
-        // GET: Administrador/Edit/5
+        // GET: Adminstrador/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -82,12 +81,12 @@ namespace App.Controllers
             return View(administrador);
         }
 
-        // POST: Administrador/Edit/5
+        // POST: Adminstrador/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id")] Administrador administrador)
+        public async Task<IActionResult> Edit(long id, [Bind("Nombre,Contraseña,CorreoElectrónico,Rol,Identificación,Sexo,Edad,Nombres,PrimerApellido,SegundoApellido,Id")] Administrador administrador)
         {
             if (id != administrador.Id)
             {
@@ -117,7 +116,7 @@ namespace App.Controllers
             return View(administrador);
         }
 
-        // GET: Administrador/Delete/5
+        // GET: Adminstrador/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -135,7 +134,7 @@ namespace App.Controllers
             return View(administrador);
         }
 
-        // POST: Administrador/Delete/5
+        // POST: Adminstrador/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)

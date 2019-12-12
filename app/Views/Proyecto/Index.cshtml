@@ -36,7 +36,7 @@
                 <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
                 @if (App.Models.SesiónActual.Sesión.Usuario.Rol == App.Models.Rol.CALIFICADOR) {
                     @if (ViewBag.Calificador.Proyectos.Contains(item)) {
-                    <a class="btn btn-info" asp-action="Calificar" asp-controller="Calificador" asp-route-id="@item.Id"></a>
+                    <a class="btn btn-info" asp-action="Calificar" asp-controller="Calificador" asp-route-id="@item.Id">Calificar</a>
                     }
                 }
             </td>

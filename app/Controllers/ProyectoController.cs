@@ -163,13 +163,13 @@ namespace App.Controllers
                     return View(proyecto);
                 }
 
-                if (d == null)
+                if (c1 == null)
                 {
                     ViewBag.ErrorConCalificador1 = "Este calificador no está registrado";
                     return View(proyecto);
                 }
 
-                if (d == null)
+                if (c2 == null)
                 {
                     ViewBag.ErrorConCalificador2 = "Este calificador no está registrado";
                     return View(proyecto);

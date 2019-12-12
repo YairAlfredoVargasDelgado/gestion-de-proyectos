@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace app.Migrations
 {
     [DbContext(typeof(ContextoApp))]
-    [Migration("20191212083046_InicialCreate")]
+    [Migration("20191212154305_InicialCreate")]
     partial class InicialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -16,17 +16,6 @@ namespace app.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.0.0");
-
-            modelBuilder.Entity("App.Models.Administrador", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Administrador");
-                });
 
             modelBuilder.Entity("App.Models.Asignatura", b =>
                 {
@@ -139,6 +128,9 @@ namespace app.Migrations
 
                     b.Property<long?>("AsignaturaId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<float>("Calificación")
+                        .HasColumnType("REAL");
 
                     b.Property<long?>("Calificador1Id")
                         .HasColumnType("INTEGER");
@@ -300,6 +292,13 @@ namespace app.Migrations
                     b.ToTable("Usuario");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Usuario");
+                });
+
+            modelBuilder.Entity("App.Models.Administrador", b =>
+                {
+                    b.HasBaseType("App.Models.Usuario");
+
+                    b.HasDiscriminator().HasValue("Administrador");
                 });
 
             modelBuilder.Entity("App.Models.Calificador", b =>

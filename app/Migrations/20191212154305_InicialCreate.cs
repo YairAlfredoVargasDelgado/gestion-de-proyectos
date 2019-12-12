@@ -8,18 +8,6 @@ namespace app.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Administrador",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Administrador", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Estudiante",
                 columns: table => new
                 {
@@ -61,29 +49,6 @@ namespace app.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Rúbrica",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    FechaDeRegistro = table.Column<DateTime>(nullable: false),
-                    Nombre = table.Column<string>(maxLength: 45, nullable: true),
-                    Estado = table.Column<int>(nullable: false),
-                    CalificaciónMáxima = table.Column<int>(nullable: false),
-                    AdministradorId = table.Column<long>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Rúbrica", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Rúbrica_Administrador_AdministradorId",
-                        column: x => x.AdministradorId,
-                        principalTable: "Administrador",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Asignatura",
                 columns: table => new
                 {
@@ -106,6 +71,29 @@ namespace app.Migrations
                     table.ForeignKey(
                         name: "FK_Asignatura_Usuario_DirectorId",
                         column: x => x.DirectorId,
+                        principalTable: "Usuario",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rúbrica",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FechaDeRegistro = table.Column<DateTime>(nullable: false),
+                    Nombre = table.Column<string>(maxLength: 45, nullable: true),
+                    Estado = table.Column<int>(nullable: false),
+                    CalificaciónMáxima = table.Column<int>(nullable: false),
+                    AdministradorId = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rúbrica", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Rúbrica_Usuario_AdministradorId",
+                        column: x => x.AdministradorId,
                         principalTable: "Usuario",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -166,7 +154,8 @@ namespace app.Migrations
                     DirectorId = table.Column<long>(nullable: true),
                     Calificador1Id = table.Column<long>(nullable: true),
                     Calificador2Id = table.Column<long>(nullable: true),
-                    RúbricaId = table.Column<long>(nullable: true)
+                    RúbricaId = table.Column<long>(nullable: true),
+                    Calificación = table.Column<float>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -354,9 +343,6 @@ namespace app.Migrations
 
             migrationBuilder.DropTable(
                 name: "Usuario");
-
-            migrationBuilder.DropTable(
-                name: "Administrador");
         }
     }
 }
