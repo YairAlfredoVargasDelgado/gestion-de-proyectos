@@ -7,7 +7,9 @@
 <h1>Proyectos</h1>
 
 <p>
+    @if(App.Models.SesiónActual.Sesión.Usuario.Rol == App.Models.Rol.ADMINISTRADOR || App.Models.SesiónActual.Sesión.Usuario.Rol == App.Models.Rol.DIRECTOR) {
     <a class="btn btn-success" asp-action="Create">Agregar nuevo proyecto</a>
+    }
 </p>
 <table class="table">
     <thead>

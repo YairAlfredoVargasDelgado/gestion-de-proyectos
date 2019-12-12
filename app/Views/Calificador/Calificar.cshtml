@@ -8,15 +8,17 @@
     <div class="col-md-6">
     <h4> @Html.DisplayFor(model => model.Nombre) </h4>
     <h3> @Html.DisplayFor(model => model.Rúbrica.Nombre) </h4>
+    <form asp-action="Calificar">
         @foreach(var criterio in Model.Rúbrica.Criterios) {
             <div class="form-group">
                 <label class="control-label">@criterio.Descripción</label> <strong>@criterio.Porcentaje %</strong>
                 <input type="number" class="form-control">
             </div>
         }
-        <a class="btn btn-info">Continuar</a>
-        <a class="btn btn-danger">Cancelar</a>
+        <input type="submit" class="btn btn-info" value="Continuar">
+    </form>
     </div>
+    <a class="btn btn-danger">Cancelar</a>
     <div class="col-md-6">
 
     </div>
