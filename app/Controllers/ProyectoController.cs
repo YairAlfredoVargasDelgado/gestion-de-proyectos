@@ -23,6 +23,42 @@ namespace App.Controllers
         // GET: Proyecto
         public async Task<IActionResult> Index()
         {
+            if (SesiónActual.Sesión.Usuario.Rol == Rol.CALIFICADOR)
+            {   
+                Calificador cal = (from c in _context.Calificador
+                                        where c.Id == SesiónActual.Sesión.Usuario.Id
+                                    select c).FirstOrDefault();
+                                        
+                var proyectos = (from p in _context.Proyecto
+                                where p.Calificador1.Id == cal.Id ||
+                                    p.Calificador2.Id == cal.Id
+                                select p).ToList();
+                
+                Console.WriteLine(proyectos.Count);
+                
+                cal.Proyectos = proyectos;
+
+                ViewBag.Calificador = cal;
+            }
+
+            if (SesiónActual.Sesión.Usuario.Rol == Rol.DIRECTOR)
+            {
+                Director dir = (from c in _context.Director
+                                where c.Id == SesiónActual.Sesión.Usuario.Id
+                                select c).FirstOrDefault();
+                                        
+                var proyectos = (from p in _context.Proyecto
+                                where p.Calificador1.Id == dir.Id ||
+                                    p.Calificador2.Id == dir.Id
+                                select p).ToList();
+                
+                Console.WriteLine(proyectos.Count);
+                
+                dir.Proyectos = proyectos;
+
+                ViewBag.Director = dir;
+            }
+
             return View(await _context.Proyecto.ToListAsync());
         }
 
@@ -83,22 +119,25 @@ namespace App.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Código,Nombre,Id,Descripción,IdAsignatura,IdDirector,IdCalificador1,IdCalificador2,Rúbrica")] Proyecto proyecto)
+        public async Task<IActionResult> Create([Bind("Código,Nombre,Id,Descripción,IdAsignatura,IdDirector,IdCalificado1,IdCalificado2,IdRúbrica")] Proyecto proyecto)
         {
+            ViewBag.Asignaturas = new SelectList(_context.Asignatura, "Código", "Nombre");
+            ViewBag.Rúbricas = new SelectList(_context.Rúbrica, "Id", "Nombre");
+
             if (ModelState.IsValid)
             {
-                #region ViewBag
-                ViewBag.Asignaturas = new SelectList(_context.Asignatura, "Código", "Nombre");
                 if (_context.Asignatura.Count() == 0)
                 {
                     ViewBag.ErrorNoHayAsignaturasRegistradas = "No hay asignaturas registradas";
                     return View(proyecto);
                 }
+
                 if (_context.Director.Count() == 0)
                 {
                     ViewBag.ErrorConDirector = "No hay directores registrados";
                     return View(proyecto);
                 }
+
                 if (_context.Calificador.Count() == 0)
                 {
                     ViewBag.ErrorConCalificador1 = "No hay calificadores registrados";
@@ -106,33 +145,43 @@ namespace App.Controllers
                     return View(proyecto);
                 }
 
+                if (_context.Rúbrica.Count() == 0)
+                {
+                    ViewBag.ErrorNoHayRúbricasRegistradas = "No hay rúbricas registradas";
+                    return View(proyecto);
+                }
+
                 Asignatura a = _context.Asignatura.Where(a => a.Código == proyecto.IdAsignatura).FirstOrDefault();
                 Director d = _context.Director.Where(d => d.Identificación == proyecto.IdDirector).FirstOrDefault();
                 Calificador c1 = _context.Calificador.Where(c => c.Identificación == proyecto.IdCalificado1).FirstOrDefault();
                 Calificador c2 = _context.Calificador.Where(c => c.Identificación == proyecto.IdCalificado2).FirstOrDefault();
+                Rúbrica r = _context.Rúbrica.Where(r => r.Id == proyecto.IdRúbrica).FirstOrDefault();
 
                 if (d == null)
                 {
                     ViewBag.ErrorConDirector = "Este director no está registrado";
                     return View(proyecto);
                 }
+
                 if (d == null)
                 {
                     ViewBag.ErrorConCalificador1 = "Este calificador no está registrado";
                     return View(proyecto);
                 }
+
                 if (d == null)
                 {
                     ViewBag.ErrorConCalificador2 = "Este calificador no está registrado";
                     return View(proyecto);
                 }
+                
                 ViewBag.ErrorConDirector = d.NombreCompleto();
-                #endregion
 
                 proyecto.Asignatura = a;
                 proyecto.Director = d;
                 proyecto.Calificador1 = c1;
                 proyecto.Calificador2 = c2;
+                proyecto.Rúbrica = r;
 
                 _context.Add(proyecto);
                 await _context.SaveChangesAsync();

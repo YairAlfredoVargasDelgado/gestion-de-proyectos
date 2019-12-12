@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using App.Models;
+using System.Collections.Generic;
 
 namespace App.Controllers
 {
@@ -76,12 +77,31 @@ namespace App.Controllers
                 sesión.Fecha = DateTime.Now;
                 sesión.Estado = SesiónState.INICIADA;
                 sesión.Usuario = usuario;
+
+                if (usuario.Rol == Rol.CALIFICADOR)
+                {
+                    IList<Proyecto> proyectos = (from p in _context.Proyecto
+                                                where p.Calificador1.Id == usuario.Id ||
+                                                    p.Calificador2.Id == usuario.Id
+                                                select p).ToList();
+                    ((Calificador)usuario).Proyectos = proyectos;
+                }
+
+                if (usuario.Rol == Rol.DIRECTOR)
+                {
+                    IList<Proyecto> proyectos = (from p in _context.Proyecto
+                                                where p.Director.Id == usuario.Id
+                                                select p).ToList();
+                    ((Director)usuario).Proyectos = proyectos;
+                }
+
                 _context.Add(sesión);
 
                 usuario.Sesiones.Add(sesión);
                 _context.Update(usuario);
                 
                 await _context.SaveChangesAsync();
+
                 SesiónActual.Sesión = sesión;
 
                 return RedirectToAction("Index", "Home", new { area = "" });

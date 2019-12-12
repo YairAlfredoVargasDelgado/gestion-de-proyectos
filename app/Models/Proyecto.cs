@@ -25,7 +25,7 @@ namespace App.Models
 
         [Required(ErrorMessage = "La cédula es requerida")]
         [MinLength(6, ErrorMessage = "La cédula es inválida")]
-        [DisplayName("Cédula del primer calificador")]
+        [DisplayName("Cédula del director")]
         [NotMapped]
         public string IdDirector { get; set; }
 
@@ -33,7 +33,7 @@ namespace App.Models
 
         [Required(ErrorMessage = "La cédula es requerida")]
         [MinLength(6, ErrorMessage = "La cédula es inválida")]
-        [DisplayName("Cédula del director")]
+        [DisplayName("Cédula del primer calificador")]
         [NotMapped]
         public string IdCalificado1 { get; set; }
 

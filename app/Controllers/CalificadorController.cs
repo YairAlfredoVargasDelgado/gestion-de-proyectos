@@ -42,7 +42,39 @@ namespace App.Controllers
                 return NotFound();
             }
 
+            var proyectos = (from p in _context.Proyecto
+                            where p.Calificador1.Id == id ||
+                                  p.Calificador2.Id == id
+                            select p).ToList();
+            
+            calificador.Proyectos = proyectos;
+
             return View(calificador);
+        }
+
+        public async Task<IActionResult> Calificar(long id)
+        {
+            Console.WriteLine(id);
+            Proyecto p = await (from _p in _context.Proyecto
+                                where _p.Id == id
+                            select _p)
+                            .Include("Asignatura")
+                            .Include("Calificador1")
+                            .Include("Calificador2")
+                            .Include("Director")
+                            .Include(__p => __p.Rúbrica)
+                                .ThenInclude(c => c.Criterios)
+                            .FirstOrDefaultAsync();
+            Console.WriteLine(p.Rúbrica.Nombre);
+            foreach(var c in p.Rúbrica.Criterios)
+            {
+                Console.WriteLine(c.Descripción);
+            }
+            if (p != null)
+            {
+                return View(p);
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Calificador/Create
@@ -56,10 +88,11 @@ namespace App.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CorreoElectrónico,Rol,Nombre,Contraseña,Identificación,Sexo,Edad,Nombres,PrimerApellido,SegundoApellido,Id")] Calificador calificador)
+        public async Task<IActionResult> Create([Bind("CorreoElectrónico,Nombre,Contraseña,Identificación,Sexo,Edad,Nombres,PrimerApellido,SegundoApellido,Id")] Calificador calificador)
         {
             if (ModelState.IsValid)
             {
+                calificador.Rol = Rol.CALIFICADOR;
                 _context.Add(calificador);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

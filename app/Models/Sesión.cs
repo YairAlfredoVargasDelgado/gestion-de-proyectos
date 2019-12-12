@@ -9,7 +9,7 @@ namespace App.Models
         [NotMapped]
         [Required(ErrorMessage="El nombre es requerido")]
         [MaxLength(20, ErrorMessage ="El nombre es muy largo")]
-        [MinLength(10, ErrorMessage="El nombre es muy corto")]
+        [MinLength(6, ErrorMessage="El nombre es muy corto")]
         public string Nombre { get; set; }
 
         [NotMapped]

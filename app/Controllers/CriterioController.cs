@@ -119,7 +119,7 @@ namespace App.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Descripción,Id")] Criterio criterio)
+        public async Task<IActionResult> Edit(long id, [Bind("Descripción,Porcentaje,Id")] Criterio criterio)
         {
             if (id != criterio.Id)
             {
@@ -128,6 +128,10 @@ namespace App.Controllers
 
             if (ModelState.IsValid)
             {
+                var criterio1 = (from c in _context.Criterio
+                            where c.Id == id
+                            select c).Include("Rúbrica").FirstOrDefault();
+                _context.Entry(criterio1).State = EntityState.Detached;
                 try
                 {
                     _context.Update(criterio);
@@ -144,7 +148,7 @@ namespace App.Controllers
                         throw;
                     }
                 }
-            return RedirectToAction("Details", "Rúbrica", new { id = criterio.Rúbrica.Id });
+            return RedirectToAction("Details", "Rúbrica", new { id = criterio1.Rúbrica.Id });
             }
             return View(criterio);
         }

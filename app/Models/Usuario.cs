@@ -10,6 +10,8 @@ namespace App.Models
         [Required(ErrorMessage = "El nombre es requerido")]
         [MaxLength(16, ErrorMessage = "La longitud máxima para el nombre es de 16")]
         [MinLength(6, ErrorMessage = "La longitud mínima para el nombre es de 6")]
+        [DataType(DataType.Text, ErrorMessage = "El nombre es inválido")]
+        [DisplayName("Nombre de usuario")]
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = "La contraseña es requerida")]
@@ -18,6 +20,8 @@ namespace App.Models
         [DataType(DataType.Password)]
         public string Contraseña { get; set; }
 
+        [DisplayName("Correo electrónico")]
+        [DataType(DataType.EmailAddress, ErrorMessage = "Correo inválido")]
         public string CorreoElectrónico { get; set; }
 
         [NotMapped]

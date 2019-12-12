@@ -55,10 +55,11 @@ namespace App.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CorreoElectrónico,Nombre,Rol,Contraseña,Identificación,Sexo,Edad,Nombres,PrimerApellido,SegundoApellido,Id")] Director director)
+        public async Task<IActionResult> Create([Bind("CorreoElectrónico,Nombre,Contraseña,Identificación,Sexo,Edad,Nombres,PrimerApellido,SegundoApellido")] Director director)
         {
             if (ModelState.IsValid)
             {
+                director.Rol = Rol.DIRECTOR;
                 _context.Add(director);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
