@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace app.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InicialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -67,8 +67,9 @@ namespace app.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     FechaDeRegistro = table.Column<DateTime>(nullable: false),
-                    Nombre = table.Column<string>(nullable: true),
+                    Nombre = table.Column<string>(maxLength: 45, nullable: true),
                     Estado = table.Column<int>(nullable: false),
+                    CalificaciónMáxima = table.Column<int>(nullable: false),
                     AdministradorId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
@@ -138,6 +139,7 @@ namespace app.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Descripción = table.Column<string>(nullable: true),
+                    Porcentaje = table.Column<int>(nullable: false),
                     RúbricaId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
@@ -163,7 +165,8 @@ namespace app.Migrations
                     AsignaturaId = table.Column<long>(nullable: true),
                     DirectorId = table.Column<long>(nullable: true),
                     Calificador1Id = table.Column<long>(nullable: true),
-                    Calificador2Id = table.Column<long>(nullable: true)
+                    Calificador2Id = table.Column<long>(nullable: true),
+                    RúbricaId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -190,6 +193,12 @@ namespace app.Migrations
                         name: "FK_Proyecto_Usuario_DirectorId",
                         column: x => x.DirectorId,
                         principalTable: "Usuario",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Proyecto_Rúbrica_RúbricaId",
+                        column: x => x.RúbricaId,
+                        principalTable: "Rúbrica",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -292,6 +301,11 @@ namespace app.Migrations
                 column: "DirectorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Proyecto_RúbricaId",
+                table: "Proyecto",
+                column: "RúbricaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProyectoCalificador_CalificadorId",
                 table: "ProyectoCalificador",
                 column: "CalificadorId");
@@ -327,22 +341,22 @@ namespace app.Migrations
                 name: "Sesión");
 
             migrationBuilder.DropTable(
-                name: "Rúbrica");
-
-            migrationBuilder.DropTable(
                 name: "Estudiante");
 
             migrationBuilder.DropTable(
                 name: "Proyecto");
 
             migrationBuilder.DropTable(
-                name: "Administrador");
-
-            migrationBuilder.DropTable(
                 name: "Asignatura");
 
             migrationBuilder.DropTable(
+                name: "Rúbrica");
+
+            migrationBuilder.DropTable(
                 name: "Usuario");
+
+            migrationBuilder.DropTable(
+                name: "Administrador");
         }
     }
 }

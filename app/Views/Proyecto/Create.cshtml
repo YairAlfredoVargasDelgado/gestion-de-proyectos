@@ -8,9 +8,9 @@
 
 <h4>Proyecto</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+<form asp-action="Create">
+    <div class="row">
+        <div class="col-md-6">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Código" class="control-label"></label>
@@ -39,14 +39,35 @@
                 <span asp-validation-for="IdDirector" class="text-danger"></span>
                 <div class="text-danger">@ViewBag.ErrorConDirector</div>
             </div>
-            <hr />
+            <br />
             <div class="form-group">
                 <input type="submit" value="Crear" class="btn btn-primary" />
             </div>
-        </form>
+        </div>
+        <div class="col-md-6">
+            <div>
+                <label asp-for="IdCalificado1" class="control-label"></label>
+                <input asp-for="IdCalificado1" class="form-control" />
+                <span asp-validation-for="IdCalificado1" class="text-danger"></span>
+                <div class="text-danger">@ViewBag.ErrorConCalificador1</div>
+            </div>
+            <br />
+            <div>
+                <label asp-for="IdCalificado2" class="control-label"></label>
+                <input asp-for="IdCalificado2" class="form-control" />
+                <span asp-validation-for="IdCalificado2" class="text-danger"></span>
+                <div class="text-danger">@ViewBag.ErrorConCalificador2</div>
+            </div>
+            <br>
+            <div>
+                <label asp-for="IdRúbrica" class="control-label"></label>
+                @Html.DropDownList("IdRúbrica", ViewBag.Rúbricas, null, new { @class="form-control" })
+                <div class="text-danger">@ViewBag.ErrorNoHayRúbricasRegistradas</div>
+            </div>
+        </div>
     </div>
-</div>
-
+</form>
+<hr />
 <div>
     <a class="btn btn-primary" asp-action="Index">Volver a la lista</a>
 </div>

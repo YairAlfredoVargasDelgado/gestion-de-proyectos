@@ -35,6 +35,7 @@ namespace App.Controllers
             }
 
             var criterio = await _context.Criterio
+                .Include("Rúbrica")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (criterio == null)
             {
@@ -45,8 +46,15 @@ namespace App.Controllers
         }
 
         // GET: Criterio/Create
-        public IActionResult Create()
+        public IActionResult Create(long idRúbrica)
         {
+            Console.WriteLine(idRúbrica);
+            ViewBag.Rúbrica = (from r in _context.Rúbrica
+                            where r.Id == idRúbrica
+                            select r).Include("Criterios").FirstOrDefault();
+            ViewBag.Rúbrica.CalcularPorcentajeRestante();
+            
+            ViewBag.MensajeDeError = "";
             return View();
         }
 
@@ -55,13 +63,37 @@ namespace App.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Descripción,Id")] Criterio criterio)
+        public async Task<IActionResult> Create([Bind("Descripción,Id,Porcentaje,IdRúbrica")] Criterio criterio)
         {
             if (ModelState.IsValid)
             {
+                Rúbrica rúbrica = (from r in _context.Rúbrica
+                                    where r.Id == criterio.IdRúbrica
+                                    select r)
+                                    .Include("Criterios")
+                                    .FirstOrDefault();
+                rúbrica.CalcularPorcentajeRestante();
+
+                if (rúbrica == null)
+                {
+                    ViewBag.MensajeDeError = "La rúbrica no se encuentra registrada";
+                    return View(criterio);
+                }
+
+                if (rúbrica.PorcentajeRestante < criterio.Porcentaje)
+                {
+                    ViewBag.MensajeDeError = "La rúbrica no tiene el porcentaje restante suficiente";
+                    ViewBag.Rúbrica = rúbrica;
+                    return View(criterio);
+                }
+
+                criterio.Rúbrica = rúbrica;
                 _context.Add(criterio);
+                criterio.Rúbrica.Criterios.Add(criterio);
+                _context.Update(criterio.Rúbrica);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                criterio.Rúbrica.CalcularPorcentajeRestante();
+                return RedirectToAction("Details", "Rúbrica", new { id = rúbrica.Id });
             }
             return View(criterio);
         }
@@ -112,7 +144,7 @@ namespace App.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Rúbrica", new { id = criterio.Rúbrica.Id });
             }
             return View(criterio);
         }
@@ -140,10 +172,13 @@ namespace App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var criterio = await _context.Criterio.FindAsync(id);
+            var criterio = await (from c in _context.Criterio
+                                    where c.Id == id
+                                    select c).Include("Rúbrica").FirstOrDefaultAsync();
+            long idRúbrica = criterio.Rúbrica.Id;
             _context.Criterio.Remove(criterio);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Rúbrica", new { id = idRúbrica });
         }
 
         private bool CriterioExists(long id)

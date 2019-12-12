@@ -56,7 +56,7 @@ namespace App.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CorreoElectrónico,Contraseña,Identificación,Sexo,Edad,Nombres,PrimerApellido,SegundoApellido,Id")] Calificador calificador)
+        public async Task<IActionResult> Create([Bind("CorreoElectrónico,Rol,Nombre,Contraseña,Identificación,Sexo,Edad,Nombres,PrimerApellido,SegundoApellido,Id")] Calificador calificador)
         {
             if (ModelState.IsValid)
             {

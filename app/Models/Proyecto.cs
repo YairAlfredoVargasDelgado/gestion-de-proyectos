@@ -25,21 +25,33 @@ namespace App.Models
 
         [Required(ErrorMessage = "La cédula es requerida")]
         [MinLength(6, ErrorMessage = "La cédula es inválida")]
-        [DisplayName("Cédula del director")]
+        [DisplayName("Cédula del primer calificador")]
         [NotMapped]
         public string IdDirector { get; set; }
 
         public Director Director { get; set; }
 
+        [Required(ErrorMessage = "La cédula es requerida")]
+        [MinLength(6, ErrorMessage = "La cédula es inválida")]
+        [DisplayName("Cédula del director")]
         [NotMapped]
         public string IdCalificado1 { get; set; }
 
         public Calificador Calificador1 { get; set; }
 
+        [Required(ErrorMessage = "La cédula es requerida")]
+        [MinLength(6, ErrorMessage = "La cédula es inválida")]
+        [DisplayName("Cédula del segundo calificador")]
         [NotMapped]
         public string IdCalificado2 { get; set; }
 
         public Calificador Calificador2 { get; set; }
+
+        [DisplayName("Rúbrica de calificación")]
+        [NotMapped]
+        public long IdRúbrica { get; set; }
+
+        public Rúbrica Rúbrica { get; set; }
 
         public Proyecto()
         {

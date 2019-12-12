@@ -33,11 +33,13 @@ namespace app.Controllers
             }
 
             var rúbrica = await _context.Rúbrica
+                .Include("Criterios")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (rúbrica == null)
             {
                 return NotFound();
             }
+            rúbrica.CalcularPorcentajeRestante();
 
             return View(rúbrica);
         }

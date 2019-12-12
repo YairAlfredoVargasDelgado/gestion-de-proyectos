@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace app.Migrations
 {
     [DbContext(typeof(ContextoApp))]
-    [Migration("20191211163718_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20191212083046_InicialCreate")]
+    partial class InicialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -65,6 +65,9 @@ namespace app.Migrations
 
                     b.Property<string>("Descripción")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Porcentaje")
+                        .HasColumnType("INTEGER");
 
                     b.Property<long?>("RúbricaId")
                         .HasColumnType("INTEGER");
@@ -156,6 +159,9 @@ namespace app.Migrations
                     b.Property<string>("Nombre")
                         .HasColumnType("TEXT");
 
+                    b.Property<long?>("RúbricaId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AsignaturaId");
@@ -165,6 +171,8 @@ namespace app.Migrations
                     b.HasIndex("Calificador2Id");
 
                     b.HasIndex("DirectorId");
+
+                    b.HasIndex("RúbricaId");
 
                     b.ToTable("Proyecto");
                 });
@@ -201,6 +209,9 @@ namespace app.Migrations
                     b.Property<long?>("AdministradorId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("CalificaciónMáxima")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Estado")
                         .HasColumnType("INTEGER");
 
@@ -208,7 +219,8 @@ namespace app.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nombre")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(45);
 
                     b.HasKey("Id");
 
@@ -317,7 +329,7 @@ namespace app.Migrations
 
             modelBuilder.Entity("App.Models.Criterio", b =>
                 {
-                    b.HasOne("App.Models.Rúbrica", null)
+                    b.HasOne("App.Models.Rúbrica", "Rúbrica")
                         .WithMany("Criterios")
                         .HasForeignKey("RúbricaId");
                 });
@@ -350,6 +362,10 @@ namespace app.Migrations
                     b.HasOne("App.Models.Director", "Director")
                         .WithMany("Proyectos")
                         .HasForeignKey("DirectorId");
+
+                    b.HasOne("App.Models.Rúbrica", "Rúbrica")
+                        .WithMany()
+                        .HasForeignKey("RúbricaId");
                 });
 
             modelBuilder.Entity("App.Models.ProyectoCalificador", b =>

@@ -35,10 +35,11 @@ namespace App.Controllers
             }
 
             var proyecto = await _context.Proyecto
-                .Include(p => p.Asignatura)
-                .Include(p => p.Director)
-                .Include(p => p.Calificador1)
-                .Include(p => p.Calificador2)
+                .Include("Asignatura")
+                .Include("Director")
+                .Include("Calificador1")
+                .Include("Calificador2")
+                .Include("Rúbrica")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (proyecto == null)
             {
@@ -51,17 +52,29 @@ namespace App.Controllers
         // GET: Proyecto/Create
         public IActionResult Create()
         {
-            #region ViewBag
             ViewBag.Asignaturas = new SelectList(_context.Asignatura, "Código", "Nombre");
+            ViewBag.Rúbricas = new SelectList(_context.Rúbrica, "Id", "Nombre");
+
             if (_context.Asignatura.Count() == 0)
             {
                 ViewBag.ErrorNoHayAsignaturasRegistradas = "No hay asignaturas registradas";
             }
+
+            if (_context.Rúbrica.Count() == 0)
+            {
+                ViewBag.ErrorNoHayRúbricasRegistradas = "No hay rúbricas registradas";
+            }
+
             if (_context.Director.Count() == 0)
             {
                 ViewBag.ErrorConDirector = "No hay directores registrados";
             }
-            #endregion
+
+            if (_context.Calificador.Count() == 0)
+            {
+                ViewBag.ErrorConCalificador1 = "No hay calificadores registrados";
+                ViewBag.ErrorConCalificador2 = "No hay calificadores registrados";
+            }
             return View();
         }
         
@@ -70,7 +83,7 @@ namespace App.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Código,Nombre,Id,Descripción,IdAsignatura,IdDirector")] Proyecto proyecto)
+        public async Task<IActionResult> Create([Bind("Código,Nombre,Id,Descripción,IdAsignatura,IdDirector,IdCalificador1,IdCalificador2,Rúbrica")] Proyecto proyecto)
         {
             if (ModelState.IsValid)
             {
@@ -86,17 +99,41 @@ namespace App.Controllers
                     ViewBag.ErrorConDirector = "No hay directores registrados";
                     return View(proyecto);
                 }
+                if (_context.Calificador.Count() == 0)
+                {
+                    ViewBag.ErrorConCalificador1 = "No hay calificadores registrados";
+                    ViewBag.ErrorConCalificador2 = "No hay calificadores registrados";
+                    return View(proyecto);
+                }
+
                 Asignatura a = _context.Asignatura.Where(a => a.Código == proyecto.IdAsignatura).FirstOrDefault();
                 Director d = _context.Director.Where(d => d.Identificación == proyecto.IdDirector).FirstOrDefault();
+                Calificador c1 = _context.Calificador.Where(c => c.Identificación == proyecto.IdCalificado1).FirstOrDefault();
+                Calificador c2 = _context.Calificador.Where(c => c.Identificación == proyecto.IdCalificado2).FirstOrDefault();
+
                 if (d == null)
                 {
                     ViewBag.ErrorConDirector = "Este director no está registrado";
                     return View(proyecto);
                 }
+                if (d == null)
+                {
+                    ViewBag.ErrorConCalificador1 = "Este calificador no está registrado";
+                    return View(proyecto);
+                }
+                if (d == null)
+                {
+                    ViewBag.ErrorConCalificador2 = "Este calificador no está registrado";
+                    return View(proyecto);
+                }
                 ViewBag.ErrorConDirector = d.NombreCompleto();
                 #endregion
+
                 proyecto.Asignatura = a;
                 proyecto.Director = d;
+                proyecto.Calificador1 = c1;
+                proyecto.Calificador2 = c2;
+
                 _context.Add(proyecto);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

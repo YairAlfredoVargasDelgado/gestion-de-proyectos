@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Detalles</h1>
 
 <div>
     <h4>Rúbrica</h4>
@@ -28,9 +28,56 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Estado)
         </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CalificaciónMáxima)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CalificaciónMáxima)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PorcentajeRestante)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PorcentajeRestante) %
+        </dd>
     </dl>
+    <div>
+        @Html.ActionLink("Registrar criterio", "Create", "Criterio", new { idRúbrica = Model.Id }, new { @class = "btn btn-info" })
+    </div>
+    <br>
+    @if (Model.Criterios.Count != 0) {
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Porcetaje</th>
+                <th></th>
+            </tr>
+        </thead>
+    <tbody>
+    @foreach (var item in Model.Criterios) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripción)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Porcentaje) %
+            </td>
+            <td>
+                <a asp-action="Edit" class="btn btn-primary" style="margin-right: 5px" asp-controller="Criterio" asp-route-id="@item.Id">Editar</a>
+                <a asp-action="Details" class="btn btn-primary" style="margin-right: 5px" asp-controller="Criterio" asp-route-id="@item.Id">Detalles</a>
+                <a asp-action="Delete" class="btn btn-primary" style="margin-right: 5px" asp-controller="Criterio" asp-route-id="@item.Id">Eliminar</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+    </table>
+    } else {
+        <h4>Esta rúbrica no tiene criterios registrados</h4>
+    }
 </div>
+<br>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id" style="margin-left:5px">Editar</a>
+    <a class="btn btn-danger" asp-action="Index">Volver</a>
 </div>
