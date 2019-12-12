@@ -8,7 +8,7 @@
     <div class="col-md-6">
     <h4> @Html.DisplayFor(model => model.Nombre) </h4>
     <h3> @Html.DisplayFor(model => model.Rúbrica.Nombre) </h4>
-    <form asp-action="Calificar">
+    <form asp-controller="Proyecto" asp-action="Calificar">
         @foreach(var criterio in Model.Rúbrica.Criterios) {
             <div class="form-group">
                 <label class="control-label">@criterio.Descripción</label> <strong>@criterio.Porcentaje %</strong>

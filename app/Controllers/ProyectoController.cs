@@ -20,6 +20,11 @@ namespace App.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> Calificar()
+        {
+            return View();
+        }
+
         // GET: Proyecto
         public async Task<IActionResult> Index()
         {
@@ -182,6 +187,7 @@ namespace App.Controllers
                 proyecto.Calificador1 = c1;
                 proyecto.Calificador2 = c2;
                 proyecto.Rúbrica = r;
+                proyecto.Calificación = 0;
 
                 _context.Add(proyecto);
                 await _context.SaveChangesAsync();
