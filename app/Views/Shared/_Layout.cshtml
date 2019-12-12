@@ -34,7 +34,7 @@
                             <a class="nav-link text-white" style ="margin-left:50px" asp-area="" asp-controller="Director" asp-action="Index">Director</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" style ="margin-left:50px" asp-area="" asp-controller="Administrador" asp-action="Index">Administrador</a>
+                            <a class="nav-link text-white" style ="margin-left:50px" asp-area="" asp-controller="Adminstrador" asp-action="Index">Administrador</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" style ="margin-left:50px" asp-area="" asp-controller="Rúbrica" asp-action="Index">Rúbrica</a>
@@ -45,7 +45,7 @@
                         }
                         <li>
                             <form asp-controller="Sesiones" asp-action="CerrarSesión">
-                                <input type="hidden" asp-for="@App.Models.SesiónActual.Sesión.Id" />
+                                <input type="hidden" class="text-white" asp-for="@App.Models.SesiónActual.Sesión.Id" />
                                 <input type="submit" value="Cerrar sesión" class="btn btn-danger" />
                             </form>
                         </li>
